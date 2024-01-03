@@ -6,6 +6,7 @@ let secretNum = Math.floor(Math.random() * 20) + 1;
 let score = 20;
 let highScore = 0;
 console.log(secretNum);
+let random = true;
 
 const displayMessage = function (message) {
   document.querySelector(".message").textContent = message;
