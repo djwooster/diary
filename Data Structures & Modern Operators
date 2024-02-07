@@ -11,6 +11,7 @@ const restaurant = {
   categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+  // numGuests: 13,
 
   openingHours: {
     thu: {
@@ -41,9 +42,28 @@ const restaurant = {
       `Your order of ${this.starterMenu[starterIndex]} and ${this.mainMenu[mainIndex]} was received at ${time} from ${location} location. Please be patient while we prepare your delivery.`
     );
   },
+
+  orderPasta: function (ing1, ing2, ing3 = restaurant.starterMenu[3]) {
+    console.log(
+      `Here is your delicious pasta with ${ing1}, ${ing2}, and ${ing3}`
+    );
+  },
+
+  orderPizza: function (...otherIngredients) {
+    const otherIngs = otherIngredients;
+    console.log(otherIngs);
+    return otherIngs;
+  },
 };
 
-// • [NOTE] Callig the orderDelivery method of the restaurant object and passing an object in as its argument
+restaurant.homeMade = 'lickety split';
+console.log(restaurant);
+
+restaurant.orderPizza('cheese', 'ravioli', 'onions', 'spinach');
+// const otherIngs = [...otherIngredients];
+// console.log(otherIngs);
+
+// • [NOTE] Calling the orderDelivery method of the restaurant object and passing an object in as its argument
 
 restaurant.orderDelivery({
   time: '23:30',
@@ -52,8 +72,116 @@ restaurant.orderDelivery({
   starterIndex: 1,
 });
 
-// *************************************************************
+// Feb. 5, 2024
+restaurant.orderPasta(restaurant.starterMenu[1], restaurant.starterMenu[0]);
 
+// const ingredients = [
+//   prompt('Give me 3 ingredients'),
+//   prompt('Give me 3 ingredients'),
+//   prompt('Give me 3 ingredients'),
+// ];
+
+// restaurant.orderPasta(...ingredients);
+
+// Spreading objects to make a new copy and add to it or copy and change values
+
+const newRestaurant = { ...restaurant, founder: 'djWooster', babe: 'babes' };
+console.log(newRestaurant);
+
+const newRestaurantCopy = { ...restaurant };
+newRestaurantCopy.name = 'Harry Weinfields';
+console.log(newRestaurantCopy);
+console.log(restaurant);
+
+// Rest Pattern and parameters
+// Collect items and pack them into an array
+// Rest operator is on left side of assignment operator
+
+// Destructuring and collecting into an array called others
+const [a, b, ...others] = [2, 3, 4, 5];
+console.log(others);
+
+// leaving saturday alone but getting the weekdays
+const { sat, ...weekDays } = restaurant.openingHours;
+console.log(weekDays);
+
+console.log(restaurant);
+
+// *************************************************************
+// Feb. 6, 2024
+
+// 2. FUNCTIONS
+// Rest parameters take in all parameters and packs them into an array (opposite of spread operator) (SPREAD expands / REST compresses)
+
+// Rest arguments that consolidates any number of parameters passed into the function and packed into an array below
+
+const add = function (...numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) sum += numbers[i];
+  console.log(sum);
+};
+
+add(2, 3, 45, 6);
+add(2, 3, 45, 6, 6, 3, 2, 5);
+add(2, 3);
+
+const xArr = [23, 5, 7];
+add(...xArr);
+console.log(...xArr);
+
+const restPractice = [2, 9, 6, 543, 67];
+
+const restPractice2 = [...restPractice];
+console.log(restPractice2);
+
+// SHORT CIRCUITING ||
+
+//  The result of a logical operator doesn't have to be a boolean
+// they can also use and return any data type
+
+// if first value is truthy, then the other will not even be evaluated
+
+// || returns first truthy value or last if all are falsy
+
+console.log(3 || 'dJ');
+
+console.log(undefined || 0 || '' || 'Hello' || null);
+
+//  expects 'hello' -- first truthy value and short circuits the rest
+
+//  using this ternary operator to check if restaurant.numGuests exists, and if it does, then guests1 equals that, otherwise set the default to 10
+const guests1 = restaurant.numGuests ? restaurant.numGuests : 10;
+
+console.log(guests1);
+
+// great way to set default values instead of ternary operators or if/else statements by using short circuiting
+
+const restTest = restaurant.numGuests || 10;
+console.log(restTest);
+
+// SHORT CIRCUITING &&
+
+// can be used to execute code if first operand is true
+
+console.log(true && 'DJ' && 7 && 'test');
+// all truthy simply returns the final truthy value
+
+console.log(true && 'DJ' && 0 && 'test');
+// a falsy value stops the operation immediately and returns the falsy value
+
+if (restaurant.orderPizza) {
+  console.log(restaurant.orderPizza('spinach', 'mushies'));
+}
+
+restaurant.orderPizza && restaurant.orderPizza('bacon', 'cheese');
+
+const testIngs = restaurant.orderPizza('mushies', 'cake batter');
+
+console.log(testIngs[0]);
+
+/*
+
+// *************************************************************
 // Feb. 2, 2024
 // DESTRUCTURING OBJECTS
 
@@ -133,7 +261,41 @@ const [nestedIn2, , , [nestedIn5]] = nested;
 console.log(nestedIn2, nestedIn5);
 // [EXPECTS] 2 5
 
-//  • [NOTE] Default values in arrays
+//  • [NOTE] Default values in while destructuring arrays
 const arrayDefault = [6, 7];
 const [value1 = 1, value2 = 1, value3 = 1] = arrayDefault;
 console.log(value1, value2, value3);
+
+// SPREAD OPERATOR
+const arrSpread = [7, 8, 9];
+const badNewArray = [1, 2, 3, arrSpread[0], arrSpread[1]];
+
+// With spread operator
+const goodNewArray = [1, 2, 3, ...arrSpread];
+console.log(goodNewArray);
+
+// takes out of original array and writes it out manually and are valuable anytime we can use values separated by commas
+
+const newMainMenu = [
+  ...restaurant.mainMenu,
+  'Gnocci',
+  ...restaurant.starterMenu,
+];
+
+console.log(newMainMenu);
+
+// Copy array
+const mainMenuCopy = [...restaurant.mainMenu];
+
+// Join 2 arrays
+const fullMenu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+// Spread operator works on all iterables (arrays, strings, maps, sets (not objects))
+
+// Since strings are iterables, we can use spread operator on them as well
+const myName = 'Daniel';
+console.log(...myName);
+
+// Values seperated by commas are usually expected when building new arrays and passing arguments into a function
+
+*/
